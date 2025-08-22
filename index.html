@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cosmotales: Planet Explorer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="hero-header">
+  <h1>
+  <img src="logo.jpeg" alt="Logo" style="height: 120px; vertical-align: middle; border-radius: 50%; margin-right: 10px; box-shadow: 0 0 15px 5px white;">
+  Cosmotales: Planet Explorer
+</h1>
+
+  <nav>
+    <ul class="header-nav">
+      <li>
+  <a href="https://docs.google.com/drawings/d/14gUVSjPN_zW3yT5zQlpxC9MdHAKDylxqdMW8CH9tQz0/edit?usp=sharing" 
+     target="_blank" 
+     rel="noopener noreferrer">
+    🪐 Build Your Own Planet
+  </a>
+</li>
+      <li>
+  <a href="planet-simulation-qr.html" target="_blank" rel="noopener noreferrer">
+    🚀 Planet Simulation
+  </a>
+</li>
+
+      <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSe2_ISln63KJDu5B1mdhtAZAAe0G1_DVx_19of6HUPKcppQgg/viewform?usp=header" target="_blank" rel="noopener noreferrer">⭐ Rate Us</a></li>
+    </ul>
+  </nav>
+</header>
+
+
+  <section class="hero">
+    <h2>Welcome to the Universe!</h2>
+    <p>Explore planets, planet simulations, and beyond.</p>
+  </section>
+
+
+  <section class="solar-system">
+    <h2>🌞 Explore the Solar System</h2>
+    <div class="info-strip">Click the planet to learn more!</div>
+    <div class="planet-grid">
+      <div class="planet-card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Mercury_in_true_color.jpg" alt="Mercury" title="Mercury" />
+        <p>Mercury</p>
+      </div>
+      <div class="planet-card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Venus-real_color.jpg" alt="Venus" title="Venus" />
+        <p>Venus</p>
+      </div>
+      <div class="planet-card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg" alt="Earth" title="Earth" />
+        <p>Earth</p>
+      </div>
+      <div class="planet-card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg" alt="Mars" title="Mars" />
+        <p>Mars</p>
+      </div>
+      <div class="planet-card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e2/Jupiter.jpg" alt="Jupiter" title="Jupiter" />
+        <p>Jupiter</p>
+      </div>
+      <div class="planet-card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Saturn_during_Equinox.jpg" alt="Saturn" title="Saturn" />
+        <p>Saturn</p>
+      </div>
+      <div class="planet-card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Uranus2.jpg" alt="Uranus" title="Uranus" />
+        <p>Uranus</p>
+      </div>
+      <div class="planet-card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/56/Neptune_Full.jpg" alt="Neptune" title="Neptune" />
+        <p>Neptune</p>
+      </div>
+    </div>
+  </section>
+
+
+<!-- 📖 Planet Info Card (Hidden by Default) -->
+<div id="planet-info-card" class="planet-info-card hidden">
+  <h2 id="info-planet-title">Planet Name</h2>
+  <p id="info-planet-description">Description will appear here.</p>
+  
+  <button class="close-btn" onclick="closePlanetCard()">Close</button>
+
+</div>
+
+  <section class="quiz-section" id="quiz">
+  <h2>🧠 Cosmic Quiz</h2>
+  <div class="quiz-card">
+    <p class="question" id="question">Loading question...</p>
+    <div class="options" id="options"></div>
+    <p class="feedback" id="feedback"></p>
+    <button id="next-btn" style="display:none;">Next</button>
+    <div id="score-summary" style="display:none;"></div>
+    <button id="play-again-btn" style="display:none;">🔁 Play Again</button>
+  </div>
+</section>
+
+
+
+
+  <footer>
+    <p>© 2025 Cosmotales | Made by Team Stellar Forge 💫</p>
+  </footer>
+
+  <!-- Background Music -->
+  <audio id="bg-music" autoplay loop>
+    <source src="assets/space-audio.mp3" type="audio/x-m4a">
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- Music Toggle Button -->
+  <button id="music-toggle">🔊 Music On</button>
+
+  <script>
+    const music = document.getElementById('bg-music');
+    const toggleBtn = document.getElementById('music-toggle');
+
+    // Ensure audio starts with user interaction (required by some browsers)
+    document.addEventListener("click", () => {
+      if (music.paused) {
+        music.play().catch(() => {});
+      }
+    }, { once: true });
+
+    // Toggle mute/unmute
+    toggleBtn.addEventListener('click', () => {
+      music.muted = !music.muted;
+      toggleBtn.textContent = music.muted ? '🔇 Music Off' : '🔊 Music On';
+    });
+  </script>
+
+<script src="script.js"></script>
+<!-- 👾 Floating Mascot -->
+<!--<img src="https://i.imgur.com/y3pUJ5l.png" alt="Mascot" id="mascot" />-->
+
+
+<script>
+  const canvas = document.getElementById('planetCanvas');
+  const ctx = canvas.getContext('2d');
+
+  let painting = false;
+
+  const brushColorPicker = document.getElementById('brushColor') || { value: '#00bfff' };
+  const brushSizeSlider = document.getElementById('brushSize') || { value: 5 };
+
+  function getBrushColor() {
+    return brushColorPicker.value || '#00bfff';
+  }
+
+  function getBrushSize() {
+    return parseInt(brushSizeSlider.value) || 5;
+  }
+
+  function startPosition(e) {
+    painting = true;
+    draw(e);
+  }
+
+  function endPosition() {
+    painting = false;
+    ctx.beginPath();
+  }
+
+  function draw(e) {
+    if (!painting) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    ctx.lineWidth = getBrushSize();
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = getBrushColor();
+
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+  }
+
+  canvas.addEventListener('mousedown', startPosition);
+  canvas.addEventListener('mouseup', endPosition);
+  canvas.addEventListener('mouseout', endPosition);
+  canvas.addEventListener('mousemove', draw);
+</script>
+
+<!--<div id="planet-popup" class="planet-popup">
+  <div class="popup-content">
+    <span class="close-btn" onclick="closePopup()">&times;</span>
+    <h2 id="popup-title"></h2>
+    <div id="popup-description"></div>
+  </div>
+</div>-->
+
+
+</body>
+</html>
